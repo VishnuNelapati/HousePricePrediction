@@ -1,204 +1,1052 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Predicting GDP per capita for countries using several factors</title>
-        <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/favicon.ico')}}" />
+        <title>House Price Prediction - Bay Area</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="static\assets\home.png" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
+        <link href="static/css/styles.css" rel="stylesheet" />
+
+        <!-- Math -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
+
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
+
+        <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js" integrity="sha384-yACMu8JWxKzSp/C1YV86pzGiQ/l1YUfE8oPuahJQxzehAjEt2GiQuy/BIvl9KyeF" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+
     </head>
     <body id="page-top">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-            <div class="container px-4">
-                <a class="navbar-brand" href="#page-top">Country GDP predictor</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container" >
+                <a class="navbar-brand"  href="#page-top" ><img src="static\assets\img\logo.png" style="width:75px;height:75px;object-position:50% 50%"  /> AI CAMP  </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars ms-1"></i>
+                </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#services">Exploration</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Machine learning</a></li>
-                        <li class="nav-item"><a class = "nav-link" href="#Conclusion">Conclusion</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+                    <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#introduction">Introduction</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Services">Data Cleansing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#portfolio">Exploratory Analysis</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#about">Pipeline</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#team">Models & Metrics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Predictions">Predictions</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <!-- Header-->
-        <header class="bg-primary bg-gradient text-white">
-            <div class="container px-4 text-center">
-                <h1 class="fw-bolder">Predicting GDP per capita for countries using several factors</h1>
-                <p class="lead">A data science project by AI Camp students</p>
-                <a class="btn btn-lg btn-light" href="#about">See our work below</a>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container">
+                <div class="masthead-heading text-uppercase">Welcome To AI CAMP Summer 2022!</div>
+                <div class="masthead-subheading ">It's Nice To Meet You</div>
+                <a class="btn btn-primary btn-xl text-uppercase" href="https://www.ai-camp.org/">About US</a>
             </div>
         </header>
-        <!-- About section-->
-        <section id="about">
-            <div class="container px-4">
-                <div class="row gx-4 justify-content-center">
-                    <div class="col-lg-8">
-                        <h2>What does the project do?
-                        </h2>
-                        <p class="lead">In our dataset, there is information on population height, literacy, infant mortality, etc... that correlate with each other in interesting ways. Our goal will be to predict the wealth of nations, which will be measured in GDP per capita. Looking at same characteristics of the dataset, the GDP per capita ranges from $500 to $55,100 and has a standard deviation of $9834</p>
+
+        <!-- Introduction -->
+        <section class="page-section" id="introduction">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">House Price Prediction - Bay Area</h2>
+                    <p> Real Estate is part and parcel of every one's life.One has to involve in process of buying the house at certain point of time in life. From Real estate investor point of view , real estate investment analysis is basically the process of analyzing investment opportunities to decide whether they’ll give you the profits you’re aiming for to achieve your investment goals and this is perhaps the most crucial part to success.
+                        For normal individual house is a necessity and one of the big investments in their life.So ,There are many factors which affect the house prices such as number of bedrooms, bathrooms, mortgage rates ,crime rates in neighborhood, schools in neighborhood and many other factors. Having a good overview on the market will help in buying or selling the house in the market at right price.    </p>
+                    <br></br>
+                    <h5> Why do we require to analyse the real estate and predict the house prices ?  </h5>
+                    <a href = "https://www.noradarealestate.com/blog/california-housing-market/#:~:text=Homes%20are%20still%20flying%20off,rise%20in%20California%20home%20prices." > LINK </a>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <span class="fa-stack fa-4x">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/SARS-CoV-2_without_background.png/800px-SARS-CoV-2_without_background.png" width = "100" height = "100">
+                        </span>
+                        <h4 class="my-3">Pandemic</h4>
+                        <p class="text-muted">During the pandemic and after the pandemic many individuals started looking for own houses, which resulted in supply and demand imbalance. The houses built are reduced due to government restrictions and pandemic but the demand for houses was increasing.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="fa-stack fa-4x">
+<!--                            <i class="fas fa-circle fa-stack-2x text-primary"></i>-->
+<!--                            <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>-->
+                            <img src="https://cdn2.iconfinder.com/data/icons/real-estate-1-7-1/1024/increase_value-512.png" width = "100" height="100" >
+                        </span>
+                        <h4 class="my-3">House Price</h4>
+                        <p class="text-muted">There is huge demand for housed than ever before.The new houses being built are not enough to meet the demand , so there was huge raise in median price of houses in various counties in california. So , to make better understanding on what factors are influencing the house prices , we are analyzing the housing data scrapped from zillow website.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="fa-stack fa-4x">
+<!--                            <i class="fas fa-circle fa-stack-2x text-primary"></i>-->
+<!--                            <i class="fas fa-lock fa-stack-1x fa-inverse"></i>-->
+                            <img src="https://cdn-icons-png.flaticon.com/512/1340/1340396.png" width = "100" height = "100">
+                        </span>
+                        <h4 class="my-3">Mortgage Rates</h4>
+                        <p class="text-muted">Mortgage rate reached all-time low during the pandemic which resulted the buyers to look for houses. These low-interest rates have been continuing to attract first-time buyers. Although there is slight increase in mortgages rates , the buyers are still showing interest to buy houses.</p>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Services section-->
-        <section class="bg-light" id="services">
-            <div class="container px-4">
-                <div class="row gx-4 justify-content-center">
-                    <div class="col-lg-8">
-                    <h1 id="top-level-heading">Exploration</h1><br/>
+
+        <!-- Data Cleansing-->
+         <section class="page-section" id="Services">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Data Cleansing/ Manipulation</h2>
+                    <p class="section-subheading text-muted">Data cleaning is considered a foundational step for data science basics, as it plays an important role in an analytical process that helps uncover reliable answers. Improving the data quality through data cleaning can eliminate problems like expensive processing errors and incorrect data.Data Cleaning includes many more actions than just removing the data, the process also requires fixing wrong spellings and syntactical errors, correcting and filling of empty fields, and identifying duplicate records to name a few.</p>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h4 class="my-3">Removing unwanted columns</h4>
+                        <p class="text-muted">Often real world data comes with too much noise , where we only few columns provide valuable information. So before doing any data analysis it is recommended to drop these columns. </p>
+                        <br><p>Often subject-matter experts are required to know which columns are important for analysis or model building.</p>
                     </div>
-                    <div class="col-lg-8">
-                        <h3>Exploration of data: Correlation table heatmap</h3>
-                        <p class="lead">First, we created a correlation table to see how different features correlated with the wealth of nations. Some surprising results were that the number of phones per hundred people and male height in cm were highly correlated with GDP per capita. Meanwhile, birthrate and infant mortality were highly negatively correlated</p>
-                    <iframe width="900" height="900" title="Correlation Table of Features" src="{{url_for('static', filename='all_correlation_map.html')}}"></iframe> <br>
+                    <div class="col-md-4">
+                        <h4 class="my-3">Dealing with outliers</h4>
+                        <p class="text-muted">Outliers are extreme values that deviate from other observations on data, they may indicate variability in measurement, experimental errors or a novelty. In other words, an outlier is an observation that diverges from an overall pattern on a sample or a data set.Outliers have a huge impact on the result of data analysis and various statistical measures.</p>
+                        <p><br> Outliers can be identified by various plots such as box plot or scatter plot. These outliers can be replaced with mean or median of the respective column , so that we are not loosing data.</p>
                     </div>
-                    <div class="col-lg-8">
-                        <h3>Exploration of data: Scatterplots</h3>
-                        <p class="lead">Scatterplots clearly demonstrate to us more positive and negative trends in our data. Most surprising to us is that as agricultural goes to zero, GDP becomes exponentially higher.</p>
-                        <iframe width="700" height="700" title="Scatterplots of features in relation to GDP" src="{{url_for('static', filename='GDP scatterplots.html')}}"></iframe> <br><br>
+                    <div class="col-md-4">
+                        <h4 class="my-3">Data Formats</h4>
+                        <p class="text-muted">Often data in real world data columns has so many types of data formats. For example , Lot Area was defined in sqft for few houses and acres in few properties. It is important to maintain that all the data formats are uniform with in a column.</p>
                     </div>
-                    <div class="col-lg-8">
-                        <h3>Visualization of crucial features</h3>
-                        <p class="lead">We isolated the above features that we saw as most important and turned them into their own correlation table, so that we can see how these crucial features affect wealth.</p>
-                        <iframe width="800" height="800" title="Crucial Features Hetmap" src="{{url_for('static', filename='crucial_features_heatmap.html')}}"></iframe>  
+                </div>
+
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h4 class="my-3">Imputation of Nulls</h4>
+                        <p class="text-muted">Real world data always comes with gaps in the data. These nulls can be treated in many ways. One of the most widely used methods is to impute the null values with the mean or median or mode or nearby values(KNN imputer). </p>
+                        <p><br> Python has inbuilt functions to replace these null values. Functions like numerical imputer or KNN imputer helps in replacing these null values.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="my-3">Encoding categorical values</h4>
+                        <p class="text-muted"> Often real world data contains both numerical and categorical data. These categorical columns required to be encoded when fed to a machine learning model, as machine learning model only understands numeric data.For example , gender column contains Male, Female etc. , these values can be converted to numerical by encoding male to 0 , female to 1. </p>
+                        <p><br> Python has inbuilt functions to convert these categorical columns to numeric. One hot encoder , label encoder etc helps in converting categorical to numeric.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="my-3">Merging Data Files</h4>
+                        <p class="text-muted"> </p>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </section>
+        <!-- Portfolio Grid-->
+        <section class="page-section bg-light" id="portfolio">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Exploratory Data Analysis</h2>
+<!--                    <h3 class="section-subheading text-muted"></h3>-->
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Portfolio item 1-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="static/assets/img/portfolio/1.png" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading"> Geo Distribution </div>
+                                <div class="portfolio-caption-subheading text-muted">How properties are distributed in Bay Area ? </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Portfolio item 2-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal2">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="static/assets/img/portfolio/2.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">Type of Houses</div>
+                                <!--div class="portfolio-caption-subheading text-muted">Graphic Design</--div-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- Portfolio item 3-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal3">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="static/assets/img/portfolio/3.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">Old/New Houses for sale</div>
+                                <div class="text-muted">Which cities has most old and new houses ? </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
+                        <!-- Portfolio item 4-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal4">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="static/assets/img/portfolio/4.png" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">Ratings vs Prices</div>
+                                <div class="text-muted">How schools , Employment ratings etc. effect the house prices ? </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
+                        <!-- Portfolio item 5-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal5">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="static/assets/img/portfolio/5.png" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">Correlation Heat Map</div>
+                                <div class="portfolio-caption-subheading text-muted">How features are correlated with others ? </div> <br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <!-- Portfolio item 6-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal6">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="static/assets/img/portfolio/6.png" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">Scatter Plots</div>
+                                <div class="portfolio-caption-subheading text-muted">How house prices trend with other features ?</div> <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- About-->
+        <section class="page-section" id="about">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Machine Leaning Pipeline</h2>
+                    <p> <br></p>
+<!--                    <h3 class="section-subheading text-muted"></h3>-->
+                </div>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="static/assets/img/about/1.jpg" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading"> Data Validation & Feature Engineering </h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Feature selection is one of the most prominent step in any model building. In this step we will select only the features that contribute to the model. Check for null values or if there are any outliers in the data. Regression models are sensitive to outliers , so outliers need to treated before building a model. </p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="static/assets/img/about/2.jpg" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading">Test Train Split</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">It is important that data is split into test and train set and Model is trained on only train data. Test data is used to evaluate the model and fine tune the model.</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="static/assets/img/about/3.jpg" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading">Encoding , Scaling and PCA </h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Any Machine learning Model needs inputs in numerical type to build data. One Hot Encoding or Ordinal Encoder . Scaling is required for numerical data so that the gradient will decent fast. Principal component analysis (PCA) is one of a family of techniques for taking high-dimensional data, and using the dependencies between the variables to represent it in a more tractable, lower-dimensional basis, without losing too much information.</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="static/assets/img/about/4.jpg" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading">Building Model,Validating Model</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted"> Creating a pipeline for model to run on training data. Once model is built it should be validated with test data and compared against the test data to calculate R2 and mean square error. Once these metrics are calculated features are dropped based on how much they are contributing to model. This help in more accurate predictions .</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="static/assets/img/about/3.jpg" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading"> Fine Tuning </h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted"> Exhaustive search over specified parameter values for an estimator. GridSearchCV implements a “fit” and a “score” method. The parameters of the estimator used to apply these methods are optimized by cross-validated grid-search over a parameter grid.</p></div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                                Model
+                                <br />
+                                Deployment
+                                <br />
+                            </h4>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+         </section>
+        <!-- Team-->
+        <section class="page-section bg-light" id="team">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase"> Models </h2>
+                    <h6 class="section-subheading text-muted">Below are the few models trained to predict the house prices and information of the models , metrics are displayed.</h6>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-sm-3">
+                        <div class="team-member">
+                            <h4>Linear Regression </h4>
+                            <img  src="static/assets/img/team/Regression.png" alt="..." />
+                            <p>Linear regression is a linear approach for modelling the relationship between a scalar response and one or more explanatory variables. The case of one explanatory variable is called simple linear regression; for more than one, the process is called multiple linear regression.This term is distinct from multivariate linear regression, where multiple correlated dependent variables are predicted, rather than a single scalar variable.Gradient descent is an iterative optimization algorithm to find the minimum of a function.Linear regression uses gradient descent to find optimal solution. </p>
+                            <br></br>
+                            <ul class="list-group">
+                              <li class="list-group-item list-group-item-primary">R2 Score : 0.90</li>
+                              <li class="list-group-item list-group-item-secondary">RMSE : 383942.18 </li>
+                              <li class="list-group-item list-group-item-success">MAPE : 19.4% </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="team-member">
+                             <h4>Random Foret</h4>
+                            <img  src="static/assets/img/team/RandomForest.png" alt="..." />
+                            <p>Random forest is a commonly-used machine learning algorithm , which combines the output of multiple decision trees to reach a single result.The random forest algorithm is an extension of the bagging method as it utilizes both bagging and feature randomness to create an uncorrelated forest of decision trees. Feature randomness, also known as feature bagging or “the random subspace method”, generates a random subset of features, which ensures low correlation among decision trees. This is a key difference between decision trees and random forests.</p>
+                           <br></br>
+                            <ul class="list-group">
+                              <li class="list-group-item list-group-item-primary">R2 Score : 0.96</li>
+                              <li class="list-group-item list-group-item-secondary">RMSE : 237156.10 </li>
+                              <li class="list-group-item list-group-item-success">MAPE : 10.0% </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="team-member">
+                            <h4>XGBoost Regressor</h4>
+                            <img src="static/assets/img/team/XGBOOST.png" alt="..." />
+                            <p class="text-center" > XGBoost is an implementation of the Gradient Boosted Decision Trees algorithm . We go through cycles that repeatedly builds new models and combines them into an ensemble model. We start the cycle by calculating the errors for each observation in the dataset. We then build a new model to predict those. We add predictions from this error-predicting model to the "ensemble of models."To make a prediction, we add the predictions from all previous models. We can use these predictions to calculate new errors, build the next model, and add it to the ensemble.</p>
+                            <br></br>
+                            <ul class="list-group">
+                              <li class="list-group-item list-group-item-primary">R2 Score : 0.98</li>
+                              <li class="list-group-item list-group-item-secondary">RMSE : 167131.12</li>
+                              <li class="list-group-item list-group-item-success">MAPE : 5.08%</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="team-member">
+                            <h4>Neural Network </h4>
+                            <img src="https://dockship-images.s3.ap-south-1.amazonaws.com/0943f1494b39813a7f1eba5f16c50659" alt="..." />
+                            <p class="text-center" > It’s a technique for building a computer program that learns from data. It is based very loosely on how we think the human brain works. First, a collection of software “neurons” are created and connected together, allowing them to send messages to each other. Next, the network is asked to solve a problem, which it attempts to do over and over, each time strengthening the connections that lead to success and diminishing those that lead to failure.Neural networks are prone to overfitting when trained with few number of observations , so bigger the dataset better the outcome.</p>
+                            <br></br>
+
+                            <ul class="list-group">
+                              <li class="list-group-item list-group-item-primary">R2 Score : 0.94</li>
+                              <li class="list-group-item list-group-item-secondary">RMSE : 293761.30</li>
+                              <li class="list-group-item list-group-item-success">MAPE : 10.2%</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">From the above metrics we can observe that XGBoost regressor performed well compared to all other models with an error of just 5% of the original house price. We can further use XGBoost model to predict house prices for user inputs.</p></div>
+                </div>
+            </div>
+        </section>
+        <!-- Clients-->
+        <div class="py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-sm-5 col-md-6">
+                        <a href="https://scikit-learn.org/stable/modules/model_evaluation.html" > <h4 class="text-center " >Regression Metrics</h4></a>
+                        <div class="text-center">
+                            <img src="https://images.squarespace-cdn.com/content/v1/58c95854c534a56689231265/1531151917631-MP881P65V9DJT0D4G0X9/Figura0.jpg" width = "500" height = "400">
+                        </div>
+                        <h5>R2 Score</h5>
+                            <p>The R2 score is a very important metric that is used to evaluate the performance of a regression-based machine learning model. It is pronounced as R squared and is also known as the coefficient of determination. It works by measuring the amount of variance in the predictions explained by the dataset. Simply put, it is the difference between the samples in the dataset and the predictions made by the model.</p>
+                        <br></br>
+                        <h5>Adjusted R2</h5>
+                            <p>Adjusted R-squared is a modified version of R-squared that has been adjusted for the number of predictors in the model. The adjusted R-squared increases when the new term improves the model more than would be expected by chance. It decreases when a predictor improves the model by less than expected. Typically, the adjusted R-squared is positive, not negative. It is always lower than the R-squared.</p>
+                        <br></br>
+                        <h5>Root Mean Squared Error</h5>
+                            <p>Root mean squared error (RMSE) is the square root of the mean of the square of all of the error. The use of RMSE is very common, and it is considered an excellent general-purpose error metric for numerical predictions.</p>
+                        <br></br>
+                        <h5>Mean Absolute percentage Error</h5>
+                            <p>Mean absolute percentage error (MAPE) measures the accuracy of the predictive model an organization used. It represents the average of the absolute percentage errors of each entry in a dataset, showing, on average, how accurate the predicted values were in comparison with the actual values. MAPE is often effective for analyzing larger sets of data, but it's not possible to calculate the MAPE of datasets with zero values. This is because the calculation would require dividing by zero, which is impossible.</p>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+
+                    </div>
+                    <div class="col-sm-5 col-md-6">
+                        <a href="https://scikit-learn.org/stable/modules/model_evaluation.html"><h4 class="text-center " >Classification Metrics</h4></a>
+                        <div >
+                            <h5>Confusion Matrix</h5>
+                                <p>Confusion Matrix is a performance measurement for the machine learning classification problems where the output can be two or more classes. It is a table with combinations of predicted and actual values.</p>
+                                <table class="table table-sm ">
+                                    <tbody>
+                                        <tr>
+                                            <th > </th>
+                                            <th >Predicted: 0 </th>
+                                            <th >Predicted: 1</th>
+                                        </tr>
+                                        <tr>
+                                            <td >Actual: 0</td>
+                                            <td class="table-success">True Negative (<span class="bold">TN</span>)</td>
+                                            <td class="table-danger">False Positive (<span class="bold">FP</span>)</td>
+                                        </tr>
+                                        <tr>
+                                            <td >Actual: 1</td>
+                                            <td class="table-danger">False Negative (<span class="bold">FN</span>)</td>
+                                            <td class="table-success">True Positive (<span class="bold">TP</span>)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <ul  class="list-group">
+                                    <li ><strong>True Positives (TP)</strong>: The number of positive instances correctly classified as positive. E.g., predicting an email as spam when it actually is spam.</li>
+                                    <li ><strong>False Positives (FP)</strong>: The number of negative instances incorrectly classified as positive. E.g., predicting an email is spam when it actually is not spam.</li>
+                                    <li ><strong>True Negatives (TN)</strong>: The number of negative instances correctly classified as negative. E.g., predicting an email is not spam when it actually is not spam.</li>
+                                    <li ><strong>False Negatives (FN)</strong>: The number of positive instances incorrectly classified as negative. E.g., predicting an email is not spam when it actually is spam.</li>
+                                </ul>
+                                <br></br>
+                            <h5>Accuracy</h5>
+                                <p>Accuracy is one metric for evaluating classification models. Informally, accuracy is the fraction of predictions our model got right.Accuracy is a good measure when there is class balance i.e. when both classes are almost equal or comparable. For imbalance classes other metrics such as precision , recall etc will give better perception on how model is performing on new data.</p>
+                                <p class="text-center" style="color:red;font-size:20px;">Accuracy = \(\frac {TP+TN}{TP+TN+FP+FN}\)</P>
+                            <h5>Recall / Sensitivity </h5>
+                                <p>Recall explains how many of the actual positive cases we were able to predict correctly with our model. It is a useful metric in cases where False Negative is of higher concern than False Positive. It is important in medical cases where it does not matter whether we raise a false alarm but the actual positive cases should not go undetected!</p>
+                                <p class="text-center" style="color:red;font-size:20px;">Recall = \(\frac {TP}{TP+FN}\)</P>
+                            <h5>Precision</h5>
+                                <p>Precision explains how many of the correctly predicted cases actually turned out to be positive. Precision is useful in the cases where False Positive is a higher concern than False Negatives. The importance of Precision is in music or video recommendation systems, e-commerce websites, etc. where wrong results could lead to customer churn and this could be harmful to the business.</p>
+                                <p class="text-center" style="color:red;font-size:20px;">Precision = \(\frac {TP}{TP+FP}\)</P>
+                            <h5>F1 Score</h5>
+                                <p>The F1-score (also sometimes called the F-Measure) is a single performance metric that takes both precision and recall into account. It's calculated by taking the harmonic mean of the two metrics.Only when both precision and recall have good performance will the F1-score be high.</p>
+                                <p class="text-center" style="color:red;font-size:20px;">F1 Score = \(\frac {2 . Precision . Recall}{Precision + Recall}\)</P>
+                            <h5>AUC - ROC</h5>
+                                <p>The Receiver Operator Characteristic (ROC) is a probability curve that plots the TPR(True Positive Rate) against the FPR(False Positive Rate) at various threshold values and separates the ‘signal’ from the ‘noise’. The Area Under the Curve (AUC) is the measure of the ability of a classifier to distinguish between classes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<!--        <div class="py-5">-->
+<!--            <div class="container">-->
+<!--                <div class="row align-items-center">-->
+<!--                    <div class="col-md-3 col-sm-6 my-3">-->
+<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/microsoft.svg" alt="..." aria-label="Microsoft Logo" /></a>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-3 col-sm-6 my-3">-->
+<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/google.svg" alt="..." aria-label="Google Logo" /></a>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-3 col-sm-6 my-3">-->
+<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/facebook.svg" alt="..." aria-label="Facebook Logo" /></a>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-3 col-sm-6 my-3">-->
+<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/ibm.svg" alt="..." aria-label="IBM Logo" /></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <!-- Contact-->
+        <section class="page-section bg-dark text-white" id="Predictions">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Predict House Prices</h2>
+                </div>
+                <!-- Make user predictions -->
+                <form action = "" method = "post" >
+                    <div class = "row" >
+                        <!-- City -->
+                        <div class = "input-field col s4">
+                            <label for="City"><b>City</b></label>
+                            <br>
+                            <input id = "City" name = "City" type = "text" placeholder="Enter City" class="validate" value = "Berkeley">
+                        </div>
+                        <!-- Bathrooms -->
+                        <div class = "input-field col s4">
+                            <label for="bath"><b>Bathrooms</b></label>
+                            <br>
+                            <input id = "bath" name = "Bathrooms" type = "number" placeholder="No of Bathrooms" class="validate" value = 2>
+                        </div>
+                        <!-- Bedrooms -->
+                        <div class = "input-field col s4">
+                            <label for="bed"><b>Bedrooms</b></label>
+                            <br>
+                            <input id = "bed" name = "Bedrooms" type = "number" placeholder="No of Bedrooms" class="validate" value = 3>
+                        </div>
+                        <!-- Living Area -->
+                        <div class = "input-field col s4">
+                            <label for="LivArea"><b>Living Area(in Sqft)</b></label>
+                            <br>
+                            <input id = "LivArea" name = "LivArea" type = "number" placeholder="Living Area (in Sqft)" class="validate" value = 1800>
+                        </div>
+                        <!-- Home Type -->
+                        <div class = "input-field col s4">
+                            <label for="HomeType"><b>Home Type</b></label>
+                            <br>
+                            <input list = "HomeType" name = "HomeType" type = "text" placeholder="Enter Type of Home" class="validate" value = "CONDO">
+                              <datalist id="HomeType">
+                                <option value="CONDO">
+                                <option value="MANUFACTURED">
+                                <option value="MULTI_FAMILY">
+                                <option value="SINGLE_FAMILY">
+                                <option value="TOWNHOUSE">
+                              </datalist>
+
+                        </div>
+                        <div class="w-100"></div>
                         <br>
+
+                        <div class = "input-field col s4">
+                            <label for="tax"><b>Tax Assessed Value</b></label>
+                            <br>
+                            <input id = "tax" name = "tax" type = "number" placeholder="Enter Tax Assessed Value" class="validate" value = 70000>
+                        </div>
+
+                        <div class = "input-field col s4">
+                            <label for="PriceSqft"><b>Price / Sqft</b></label>
+                            <br>
+                            <input id = "PriceSqft" name = "sqft" type = "number" placeholder="Enter Price / Sqft" class="validate" value = 750>
+                        </div>
+
+                        <div class = "input-field col s4">
+                            <label for="Heating"><b>Has Heating ? </b></label>
+                            <br>
+                            <input list="Heating" name="Heating" placeholder="Yes or No" value = "Yes">
+                              <datalist id="Heating">
+                                <option value="Yes">
+                                <option value="No">
+                              </datalist>
+                        </div>
+
+                        <div class = "input-field col s4">
+                            <label for="Cooling"><b>Has Cooling ? </b></label>
+                            <br>
+                            <input list="Cooling" name="Cooling" placeholder="Yes or No"  value = "Yes">
+                              <datalist id="Cooling">
+                                <option value="Yes">
+                                <option value="No">
+                              </datalist>
+                        </div>
+
+
+                        <div class = "input-field col s4">
+                            <label for="garage"><b>Garage Spaces</b></label>
+                            <br>
+                            <input id = "garage" name = "garage" type = "number" placeholder="No of Garage Spaces" class="validate" value = 1>
+                        </div>
+
+                        <div class="w-100"></div>
+                        <br>
+
+                        <div class = "input-field col s4">
+                            <label for="Pool"><b>Has Pool ? </b></label>
+                            <br>
+                            <input list="Pool" name="Pool" placeholder="Yes or No"  value = "Yes">
+                              <datalist id="Pool">
+                                <option value="Yes">
+                                <option value="No">
+                              </datalist>
+                        </div>
+
+
+                        <div class = "input-field col s4">
+                            <label for="fireplace"><b>Fire Places</b></label>
+                            <br>
+                            <input id = "fireplace" name = "fireplace" type = "number" placeholder="No of Fire Places" class="validate" value = 0>
+                        </div>
+
+
+
+                        <div class = "input-field col s4">
+                            <label for="Crime"><b>Crime Ratings? </b></label>
+                            <br>
+                            <input list="Crime" name="Crime" placeholder="A+ to F"  value = "A">
+                              <datalist id="Crime">
+                                <option value="A+">
+                                <option value="A">
+                                <option value="A-">
+                                <option value="A">
+                                <option value="B+">
+                                <option value="B">
+                                <option value="B-">
+                                <option value="C">
+                                <option value="C+">
+                                <option value="C-">
+                                <option value="D+">
+                                <option value="D">
+                                <option value="F">
+                              </datalist>
+                        </div>
+
+
+                        <div class = "input-field col s4">
+                            <label for="EMPLOYMENT"><b>EMPLOYMENT Ratings? </b></label>
+                            <br>
+                            <input list="EMPLOYMENT" name="EMPLOYMENT" placeholder="A+ to F" value = "A">
+                              <datalist id="EMPLOYMENT">
+                                <option value="A+">
+                                <option value="A">
+                                <option value="A-">
+                                <option value="A">
+                                <option value="B+">
+                                <option value="B">
+                                <option value="B-">
+                                <option value="C">
+                                <option value="C+">
+                                <option value="C-">
+                                <option value="D+">
+                                <option value="D">
+                                <option value="F">
+                              </datalist>
+                        </div>
+
+                        <div class = "input-field col s4">
+                            <label for="Schools"><b>School Ratings? </b></label>
+                            <br>
+                            <input list="Schools" name="Schools" placeholder="A+ to F" value = "A">
+                              <datalist id="Schools">
+                                <option value="A+">
+                                <option value="A">
+                                <option value="A-">
+                                <option value="A">
+                                <option value="B+">
+                                <option value="B">
+                                <option value="B-">
+                                <option value="C">
+                                <option value="C+">
+                                <option value="C-">
+                                <option value="D+">
+                                <option value="D">
+                                <option value="F">
+                              </datalist>
+                        </div>
+
                     </div>
-                </div>
-            </div>
-        </section>
-        <!-- Contact section-->
-        <section id="contact">
-            <div class="container px-4">
-                <div class="row gx-4 justify-content-center">
-                    <div class="col-lg-8">
-                        <h1>Machine Learning</h1></br>
-                    </div>
-                    <div class="col-lg-8">
-                        <h2>Linear Regression: Explanation</h2>
-                        <p class="lead">First, we want to try a baseline linear regression. Linear regression assumes that all features are have a linear relation with GDP per capita, and we can fit a line of best fit to predict future values</p>
-                        <img src="{{url_for('static', filename='images/LinearExplanation.png')}}" class="page-image" />
+                    <br>
+
+                    <div class="justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-l text-uppercase">Submit</button>
+                        <br>
+                        <table class="table table-dark">
+                            {{df_html | safe}}
+                        </table>
+
+                         <p><h5>{{values}}</h5></p>
                     </div>
 
-                    <div class="col-lg-8">
-                        <h2>Linear Regression: Results</h2>
-                        <p class="lead">Here we have a confusion matrix with the results of the linear regression applied on our testing dataset. A confusion matrix for a classification problem tells us the number of correct and incorrect predictions for every class (for example wealthy). For example, the model may have classified 10 countries with average GDP as average and classified 2 countries with average GDP incorrectly, shown in the below confusion matrix. Linear regression performed exceptionally well on countries with average GDP.</p>
-                        <iframe width="500" height="500" title="Linear Regression Confusion Matrix" src="{{url_for('static', filename='LinearRegressionCF.html')}}"></iframe>  
-                        <p class="lead">By calculating the total correct examples over all examples classified, we get an average accuracy of around 58%. Mean absolute error, or the average difference between predicted and actual GDP per capita, was $3299</p>
-                    </div>
-                    <div class="col-lg-8">
-                        <h2>Neural Networks: Explanation</h2>
-                        <p class="lead">Neural networks are one of the most powerful machine learning approaches for data with complicated patterns, but are more prone to overfitting to simple data.</p>
-                        <img src="{{url_for('static', filename='images/nn_explanation.png')}}" class="page-image" width="500"/>
-                    </div>
 
-                    <div class="col-lg-8">
-                        <h2>Neutral Networks: Results</h2>
-                        <p class="lead">Looking at the confusion matrix below, the neural network performed much better on wealthy and very wealthy nations.</p>
-                        <iframe width="500" height="500" title="Neural Network Confusion Matrix" src="{{url_for('static', filename='NeuralNetworkCF_matrix.html')}}"></iframe>
-                        <p class="lead">For total accuracy, the NN performed at 64.4% accuracy in classification. Mean absolute error is $2311</p>
-                    </div>
-                    <div class="col-lg-8">
-                        <h2>K Nearest Neighbors: Explanation</h2>
-                        <p class="lead">K Nearest Neighbors looks at data points in the testing set and infers the classification based on similarity to other points of the same class in the training set.</p>
-                        <img src="{{url_for('static', filename='images/knn_explanation.jpeg')}}" class="page-image" width="500"/>
-                    </div>
-                    <div class="col-lg-8">
-                        <h2>K Nearest Neighbors: Results</h2>
-                        <p class="lead">Looking at our confusion matrix below, K Nearest Neighbors performed well on very wealthy and ver poor nations.</p>
-                        <iframe width="500" height="500" title="KNN Confusion Matrix" src="{{url_for('static', filename='KNN_CF_matrix.html')}}"></iframe>  
-                        <p class="lead">For total accuracy, the NN performed at 64.4% accuracy in classification. Mean absolute error is $2311</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="bg-light" id="Conclusion">
-            <div class="container px-4">
-                <div class="row gx-4 justify-content-center">
-                    <div class="col-lg-8">
-                    <h1 id="top-level-heading">Conclusion</h1><br/>
-                    </div>
-                    <div class="col-lg-8">
 
-                        <p class="lead">In conclusion, neural networks clearly performed the best on our dataset for predicting GDP per capita. Positively correlated features like height and phone usage along with negatively correlated features like birthrate and agriculture helped us achieve these results. </p>
+                </form>
+            </div>
 
-                        <h3>So what?</h3>
-                            
-                        <p class="lead">So what is the significance of our project? Because we know which features are most correlated with a higher GDP country, we can identify both the factors that lead to countries with higher monetary value and also predict and then invest in countries with a high likelihood of future growth. </p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <section style="margin-left: 80px; margin-right: 80px;" id="team">
-        <header class="bg-primary text-center py-5 mb-4">
-            <div class="container px-4">
-              <h1 class="fw-light text-white">Meet the Extraordinary AI Camp Team</h1>
+
+
+
+
+
+
+
+
+
+
             </div>
-          </header>
-          
-          <!-- Page Content -->
-          <div class="container px-4">
-            <div class="row">
-              <!-- Team Member 1 -->
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-0 shadow">
-                  <img src="{{url_for('static', filename='images/rohan_img.png')}}" class="card-img-top" alt="...">
-                  <div class="card-body text-center">
-                    <h5 class="card-title mb-0">Rohan Joshi</h5>
-                    <div class="card-text text-black-50">Web Developer</div>
-                  </div>
-                </div>
-              </div>
-              <!-- Team Member 2 -->
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-0 shadow">
-                  <img src="{{url_for('static', filename='images/alex_duffy_img.png')}}" height="330" class="card-img-top" alt="...">
-                  <div class="card-body text-center">
-                    <h5 class="card-title mb-0">Alex Duffy</h5>
-                    <div class="card-text text-black-50">Instructor</div>
-                  </div>
-                </div>
-              </div>
-              <!-- Team Member 3 -->
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-0 shadow">
-                  <img src="{{url_for('static', filename='images/mitchell_img.png')}}" height="350" class="card-img-top" alt="...">
-                  <div class="card-body text-center">
-                    <h5 class="card-title mb-0">Mitchell Cutts</h5>
-                    <div class="card-text text-black-50">Instructor</div>
-                  </div>
-                </div>
-              </div>
-              <!-- Team Member 4 -->
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-0 shadow">
-                  <img src="{{url_for('static', filename='images/cameron_jackson_img.jfif')}}" height="250" class="card-img-top" alt="...">
-                  <div class="card-body text-center">
-                    <h5 class="card-title mb-0">Cameron Jackson</h5>
-                    <div class="card-text text-black-50">Data Scientist</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.row -->
-          
-          </div>
         </section>
         <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; AI Camp 2022</p></div>
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-start">Copyright &copy; AI CAMP 2022</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="https://twitter.com/vishnu83848269" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+<!--                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>-->
+                        <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/in/vishnu-nelapati-b5a3b4132/" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a class="link-dark text-decoration-none me-3" href="#!">Data Science</a>
+                        <a class="link-dark text-decoration-none" href="#!">Summer 2022</a>
+                    </div>
+                </div>
+            </div>
         </footer>
+        <!-- Portfolio Modals-->
+        <!-- Portfolio item 1 modal popup-->
+        <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h5 class="text-uppercase">Geo distribution of houses in california bay area</h5>
+                                    <p class="item-intro text-muted">In this section we are trying to visualize the distribution of houses over a map based on the latitude and longitude values.</p>
+<!--                                    <img class="img-fluid d-block mx-auto" src="https://images.nagwa.com/figures/explainers/845148137695/2.svg" alt="..." />-->
+
+                                    <div class="container">
+                                      <div class="row ">
+                                        <div >
+                                          <div id='geomap1'>
+                                             <h6 > Bubble Chart </h6>
+                                              <p class = "text-justify"> This map show distribution of houses around california.
+    The size of the bubble represents the house price.The larger the size of the bubble the higher the price of the house.The color of the bubble indicates
+    in which range the house prices fall.Darker blue represents the house is of low price and yellow or orange represnet the houses of higher price. </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+<!--                                    <ul class="list-inline">-->
+<!--                                        <li>-->
+<!--                                            <strong>Client:</strong>-->
+<!--                                            Threads-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <strong>Category:</strong>-->
+<!--                                            Illustration-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Close
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio item 2 modal popup-->
+        <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h5 class="text-uppercase">Visualizing the type of houses</h5>
+                                    <p class="item-intro text-muted"> In this section we are trying to analyse the proportion of houses available and respective price per sqft of the houses. </p>
+                                    <div class="container">
+                                      <div class="row justify-content-between">
+                                        <div class="col-5">
+                                          <div id='pie'>
+                                              <br></br>
+                                              <ul >
+                                                  <li>With <strong>55.8%, single family</strong> is the most popular home type in the Bay Area on Zillow.</li>
+                                                  <li>Following are condo and townhouse which contribute 25% and 11.3% of home type, respectively</li>
+                                                  <li>Multi family is pretty minor with 5.3%</li>
+                                                  <li><strong>Mobile Manufactured</strong> is the less popular home type on Zillow with <strong>2.5%</strong>. This is predictable because the Bay Area one of the most expensive regions of the state</li>
+                                              </ul>
+                                          </div>
+                                        </div>
+                                        <div class="col-1">
+                                          <br> </br>
+                                        </div>
+                                        <div class="col-5">
+                                            <div id = 'p2-bar'>
+                                                <br></br>
+                                                <ul>
+                                                    <li>Single Family_ the most popular home type on Zillow has the highest average price/sqft being 907</li>
+                                                    <li>Following is townhouse and condo for approximately 755/sqft</li>
+                                                    <li>Multi family is just around 30/sqft less than townhouse and condo with the avg price/sqft being 715</li>
+                                                    <li>Manufactured is the cheapest home type in the bay area in term of price/sqft for 236/sqft</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+<!--                                    <ul class="list-inline">-->
+<!--                                        <li>-->
+<!--                                            <strong>Client:</strong>-->
+<!--                                            Explore-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <strong>Category:</strong>-->
+<!--                                            Graphic Design-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio item 3 modal popup-->
+        <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h5 class="text-uppercase">Cities with most old and new properties</h5>
+                                    <p class="item-intro text-muted">In this section we are trying to find which areas have old properties for sale and which areas have new properties for sale.</p>
+                                    <div id = 'p3-bar'>
+                                        <br></br>
+                                        <ul>
+                                            <li>Berkeley has the most number of old properties listed on zillow to be sold</li>
+                                            <li>Mountain view has the most number of new properties listed on zillow to be sold</li>
+                                        </ul>
+
+                                    </div>
+<!--                                    <ul class="list-inline">-->
+<!--                                        <li>-->
+<!--                                            <strong>Client:</strong>-->
+<!--                                            Finish-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <strong>Category:</strong>-->
+<!--                                            Identity-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio item 4 modal popup-->
+        <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h5 class="text-uppercase">Ratings vs Price Scatter Plot</h5>
+                                    <p class="item-intro text-muted">In this section we are trying to validate how the price of houses vary with the ratings such as school rating , crime ratings , employment ratings etc. of the surroundings. </p>
+                                    <div id = 'p4-graph'>
+                                        <br></br>
+                                    </div>
+                                    <form action = "/portfolio" method = "post" >
+                                        <div class = "row justify-content-center" >
+                                            <div class = "input-field col s4">
+                                                <label for="Rating"><b>Ratings</b></label>
+                                                <br>
+                                                <input list="Rating" name="Rating" placeholder="Select one" >
+                                                  <datalist id="Rating">
+                                                    <option value="Livability">
+                                                    <option value="Schools">
+                                                    <option value="Crime">
+                                                    <option value="Employment">
+                                                    <option value="Housing">
+                                                  </datalist>
+                                            </div>
+
+                                            <div class = "input-field col s4">
+                                                <label for="agg"><b>Aggregated</b></label>
+                                                <br>
+                                                <input list="agg" name="agg" placeholder="Select one" >
+                                                  <datalist id="agg">
+                                                    <option value="True">
+                                                    <option value="False">
+                                                  </datalist>
+                                            </div>
+                                        <div >
+                                            <button type="submit" class="btn btn-primary btn-l text-uppercase">Submit</button>
+                                        </div>
+
+                                        </div>
+                                    </form>
+
+                                    <p> As we can clearly observe most of the houses with higher prices are from the areas with better schools ratings and employment ratings. Further when there are high crime ratings in the surroundings , this has a impact on house prices to certain extent.This analysis helps in buying  a right house.</p>
+<!--                                    <ul class="list-inline">-->
+<!--                                        <li>-->
+<!--                                            <strong>Client:</strong>-->
+<!--                                            Lines-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <strong>Category:</strong>-->
+<!--                                            Branding-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio item 5 modal popup-->
+        <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h5 class="text-uppercase">Correlation heat map for features of the house and price</h5>
+                                    <p class="item-intro text-muted">In this section we are trying to visualize the correlation between various features and the price of the house.By looking the correlation plot we can observe which features contribute more to price of the house and which are not.</p>
+                                    <div id = 'p5-graph1'>
+                                        <br></br>
+                                    </div>
+                                    <p>Closer look at correlation heat map of important features.</p>
+                                    <div id = 'p5-graph2'>
+                                        <br></br>
+                                    </div>
+
+                                    <p> A correlation matrix is a table showing correlation coefficients between variables. Each cell in the table shows the correlation between two variables. A correlation matrix is used to summarize data, as an input into a more advanced analysis, and as a diagnostic for advanced analyses. Values closer to 1 are highly positively correlated and values closer to -1 are negatively correlated. Values closer to zero are uncorrelated.</p>
+<!--                                    <ul class="list-inline">-->
+<!--                                        <li>-->
+<!--                                            <strong>Client:</strong>-->
+<!--                                            Southwest-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <strong>Category:</strong>-->
+<!--                                            Website Design-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio item 6 modal popup-->
+        <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <div class="modal-body">
+                                    <!-- Project details-->
+                                    <h5 class="text-uppercase">Scatter Plots</h5>
+                                    <p class="item-intro text-muted">In this section we are visualizing how certain features are trending with the price.</p>
+                                    <div id = 'p6-graph'>
+                                        <br></br>
+                                    </div>
+                                    <p>Scatter plots clearly demonstrate to us more positive and negative trends in our data.A scatter plot can be used either when one continuous variable is under the control of the experimenter and the other depends on it or when both continuous variables are independent. As we can observe from the living area , price/sqft are positively correlated with the price.The house with heating features has higher price compared to housed with no heating features.House prices also gradually increased with increase in number of bedrooms and bathrooms.</p>
+<!--                                    <ul class="list-inline">-->
+<!--                                        <li>-->
+<!--                                            <strong>Client:</strong>-->
+<!--                                            Window-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <strong>Category:</strong>-->
+<!--                                            Photography-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                        <i class="fas fa-xmark me-1"></i>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="/static/js/scripts.js"></script>
+        <script src="static/js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+        <!--Plotly Graphs section-->
+        <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+        <script type='text/javascript'>
+          var graphs = {{graphJSON | safe}};
+          Plotly.plot('geomap1',graphs,{});
+
+          var graphs = {{pie | safe}};
+          Plotly.plot('pie',graphs,{});
+
+          var graphs = {{p2_bar | safe}};
+          Plotly.plot('p2-bar',graphs,{});
+
+          var graphs = {{p3_bar | safe}};
+          Plotly.plot('p3-bar',graphs,{});
+
+          var graphs = {{p4_graph | safe}};
+          Plotly.plot('p4-graph',graphs,{});
+
+          var graphs = {{p5_graph | safe}};
+          Plotly.plot('p5-graph1',graphs,{});
+
+          var graphs = {{p5_graph2 | safe}};
+          Plotly.plot('p5-graph2',graphs,{});
+
+          var graphs = {{p6_graph | safe}};
+          Plotly.plot('p6-graph',graphs,{});
+
+        </script>
+
     </body>
 </html>
-2>
