@@ -61,7 +61,8 @@
         </header>
 
         <!-- Introduction -->
-        <section class="page-section" id="introduction">
+        <section class="page-section" >
+            <a href="#introduction" id="introduction" class="anchor"></a>
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">House Price Prediction - Bay Area</h2>
@@ -103,6 +104,7 @@
 
         <!-- Data Cleansing-->
          <section class="page-section" id="Services">
+             <a href="#Services" id="DataCleansing" class="anchor"></a>
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Data Cleansing/ Manipulation</h2>
@@ -148,6 +150,7 @@
         </section>
         <!-- Portfolio Grid-->
         <section class="page-section bg-light" id="portfolio">
+            <a href="#portfolio" id="EDA" class="anchor"></a>
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Exploratory Data Analysis</h2>
@@ -248,7 +251,8 @@
             </div>
         </section>
         <!-- About-->
-        <section class="page-section" id="about">
+        <section class="page-section" id="about" >
+            <a href="#about" id="Pipeline" class="anchor"></a>
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Machine Leaning Pipeline</h2>
@@ -317,6 +321,7 @@
          </section>
         <!-- Team-->
         <section class="page-section bg-light" id="team">
+            <a href="#team" id="Models" class="anchor"></a>
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase"> Models </h2>
@@ -463,26 +468,10 @@
         </div>
 
 
-<!--        <div class="py-5">-->
-<!--            <div class="container">-->
-<!--                <div class="row align-items-center">-->
-<!--                    <div class="col-md-3 col-sm-6 my-3">-->
-<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/microsoft.svg" alt="..." aria-label="Microsoft Logo" /></a>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-3 col-sm-6 my-3">-->
-<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/google.svg" alt="..." aria-label="Google Logo" /></a>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-3 col-sm-6 my-3">-->
-<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/facebook.svg" alt="..." aria-label="Facebook Logo" /></a>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-3 col-sm-6 my-3">-->
-<!--                        <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="static/assets/img/logos/ibm.svg" alt="..." aria-label="IBM Logo" /></a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
         <!-- Contact-->
-        <section class="page-section bg-dark text-white" id="Predictions">
+        <a href="#Predictions" id="Predictions" class="anchor"></a>
+        <section class="page-section bg-dark text-white" id="Prediction" >
+
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Predict House Prices</h2>
@@ -1047,6 +1036,51 @@
           Plotly.plot('p6-graph',graphs,{});
 
         </script>
+
+
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+          <script>
+            // Source: http://stackoverflow.com/questions/30734552/change-url-while-scrolling
+            // stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+            function isElementInViewport (el) {
+              //special bonus for those using jQuery
+              if (typeof jQuery === "function" && el instanceof jQuery) {
+                el = el[0];
+              }
+              var rect = el.getBoundingClientRect();
+              return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+              );
+            }
+            // click-to-scroll behavior
+            $(".anchor").click(function (e) {
+              e.preventDefault();
+              var section = this.href;
+              var sectionClean = section.substring(section.indexOf("#"));
+              $("html, body").animate({
+                scrollTop: $(sectionClean).offset().top
+              }, 1000, function () {
+                window.location.hash = sectionClean;
+              });
+            });
+            // listen for the scroll event
+            $(document).on("scroll", function() {
+              console.log("onscroll event fired...");
+              // check if the anchor elements are visible
+              $(".anchor").each(function (idx, el) {
+                if ( isElementInViewport(el) ) {
+                  // update the URL hash
+                  if (window.history.pushState) {
+                    var urlHash = "#" + $(el).attr("id");
+                    window.history.pushState(null, null, urlHash);
+                  }
+                }
+              });
+            });
+          </script>
 
     </body>
 </html>
