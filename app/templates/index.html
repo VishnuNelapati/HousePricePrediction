@@ -871,46 +871,71 @@
                     <div class="close-modal" data-bs-dismiss="modal"><img src="static/assets/img/close-icon.svg" alt="Close modal" /></div>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-lg-10">
+                            <div class="col-lg-12">
                                 <div class="modal-body">
                                     <!-- Project details-->
                                     <h5 class="text-uppercase">Ratings vs Price Scatter Plot</h5>
                                     <p class="item-intro text-muted">In this section we are trying to validate how the price of houses vary with the ratings such as school rating , crime ratings , employment ratings etc. of the surroundings. </p>
-                                    <div id = 'p4-graph'>
-                                        <br></br>
+
+                                    <div class="container">
+                                        <div class="row justify-content-start">
+                                            <div class = "col-6" id = 'p4-graph1'>
+                                                <p>As we can clearly observe as the livability ratings increase the average price of the houses also increase.It indicates the house prices are more costly where the livability ratings are more.</p>
+                                            </div>
+
+                                            <div class = "col-6" id = 'p4-graph2'>
+                                                <p>The crime ratings A+ indicates the neighbourhood has less crimes and F indicates the neighbourhood has more crimes.As we can clearly observe from the scatter plot, as the ratings increase the average house prices also increase gradually.</p>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class = "col-6" id = 'p4-graph3'>
+                                                <p>As we can observe from the scatter plot , as the employment ratings (More the opportunities more the rating) increase the average house prices also increases.</p>
+                                            </div>
+
+                                            <div class = "col-6" id = 'p4-graph4'>
+                                                <p>Average prices of house increase with increase of school ratings, but there are few neighbourhoods although the school ratings are low the house price are high. This might be because the crime and employment ratings in those areas might be high.</p>
+                                            </div>
+                                            <div class="w-100"></div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class = "col-6" id = 'p4-graph5'>
+                                                <p>As we can observe there is fairly no relation with housing ratings and the average prices of houses.</p>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <form action = "/portfolio" method = "post" >
-                                        <div class = "row justify-content-center" >
-                                            <div class = "input-field col s4">
-                                                <label for="Rating"><b>Ratings</b></label>
-                                                <br>
-                                                <input list="Rating" name="Rating" placeholder="Select one" >
-                                                  <datalist id="Rating">
-                                                    <option value="Livability">
-                                                    <option value="Schools">
-                                                    <option value="Crime">
-                                                    <option value="Employment">
-                                                    <option value="Housing">
-                                                  </datalist>
-                                            </div>
 
-                                            <div class = "input-field col s4">
-                                                <label for="agg"><b>Aggregated</b></label>
-                                                <br>
-                                                <input list="agg" name="agg" placeholder="Select one" >
-                                                  <datalist id="agg">
-                                                    <option value="True">
-                                                    <option value="False">
-                                                  </datalist>
-                                            </div>
-                                        <div >
-                                            <button type="submit" class="btn btn-primary btn-l text-uppercase">Submit</button>
-                                        </div>
+<!--                                    <form action = "/portfolio" method = "post" >-->
+<!--                                        <div class = "row justify-content-center" >-->
+<!--                                            <div class = "input-field col s4">-->
+<!--                                                <label for="Rating"><b>Ratings</b></label>-->
+<!--                                                <br>-->
+<!--                                                <input list="Rating" name="Rating" placeholder="Select one" >-->
+<!--                                                  <datalist id="Rating">-->
+<!--                                                    <option value="Livability">-->
+<!--                                                    <option value="Schools">-->
+<!--                                                    <option value="Crime">-->
+<!--                                                    <option value="Employment">-->
+<!--                                                    <option value="Housing">-->
+<!--                                                  </datalist>-->
+<!--                                            </div>-->
 
-                                        </div>
-                                    </form>
+<!--                                            <div class = "input-field col s4">-->
+<!--                                                <label for="agg"><b>Aggregated</b></label>-->
+<!--                                                <br>-->
+<!--                                                <input list="agg" name="agg" placeholder="Select one" >-->
+<!--                                                  <datalist id="agg">-->
+<!--                                                    <option value="True">-->
+<!--                                                    <option value="False">-->
+<!--                                                  </datalist>-->
+<!--                                            </div>-->
+<!--                                        <div >-->
+<!--                                            <button type="submit" class="btn btn-primary btn-l text-uppercase">Submit</button>-->
+<!--                                        </div>-->
 
-                                    <p> As we can clearly observe most of the houses with higher prices are from the areas with better schools ratings and employment ratings. Further when there are high crime ratings in the surroundings , this has a impact on house prices to certain extent.This analysis helps in buying  a right house.</p>
+<!--                                        </div>-->
+<!--                                    </form>-->
+
+<!--                                    <p> As we can clearly observe most of the houses with higher prices are from the areas with better schools ratings and employment ratings. Further when there are high crime ratings in the surroundings , this has a impact on house prices to certain extent.This analysis helps in buying  a right house.</p>-->
 <!--                                    <ul class="list-inline">-->
 <!--                                        <li>-->
 <!--                                            <strong>Client:</strong>-->
@@ -1040,8 +1065,20 @@
           var graphs = {{p3_bar | safe}};
           Plotly.plot('p3-bar',graphs,{});
 
-          var graphs = {{p4_graph | safe}};
-          Plotly.plot('p4-graph',graphs,{});
+          var graphs = {{p4_graph1 | safe}};
+          Plotly.plot('p4-graph1',graphs,{});
+
+          var graphs = {{p4_graph2 | safe}};
+          Plotly.plot('p4-graph2',graphs,{});
+
+          var graphs = {{p4_graph3 | safe}};
+          Plotly.plot('p4-graph3',graphs,{});
+
+          var graphs = {{p4_graph4 | safe}};
+          Plotly.plot('p4-graph4',graphs,{});
+
+          var graphs = {{p4_graph5 | safe}};
+          Plotly.plot('p4-graph5',graphs,{});
 
           var graphs = {{p5_graph | safe}};
           Plotly.plot('p5-graph1',graphs,{});
@@ -1056,8 +1093,7 @@
 
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
           <script>
-            // Source: http://stackoverflow.com/questions/30734552/change-url-while-scrolling
-            // stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+
             function isElementInViewport (el) {
               //special bonus for those using jQuery
               if (typeof jQuery === "function" && el instanceof jQuery) {
