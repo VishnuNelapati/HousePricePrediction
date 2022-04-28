@@ -111,14 +111,8 @@ def p3_bar():
 def p4_ratings(arg = "Livability" , agg=False):
     zillow = data()
     zillow.set_index('zpid',inplace=True)
-    if agg:
-        fig = px.scatter(data_frame=zillow, x=arg, y='price', size='price', size_max=15,
-                         color='price', height=500, width=1000,
-                         title=f"Scatter plot representation of Price vs {arg}",
-                         hover_data=['bathrooms', 'bedrooms', 'price', 'city'])
-        fig.update_layout(title_x=0.5)
-
-    else:
+    graphs = []
+    for arg in ['Livability','Crime','Employment','Schools','Housing']:
         if arg == 'Livability':
             df = zillow[['price', arg]].groupby(by=arg).mean().reset_index()
         else:
@@ -126,14 +120,16 @@ def p4_ratings(arg = "Livability" , agg=False):
                 g: g + ',', ascending=False)
 
         fig = px.scatter(data_frame=df, x=arg, y='price', size='price', size_max=20,
-                         color='price', height=500, width=1000,
-                         title=f"Scatter Plot Representation Of Price Against {arg}",
+                         color='price', height=450, width=600,
+                         title=f"Scatter Plot Representation Of Price Against {arg} ratings",
                          hover_data=['price', arg])
         fig.update_layout(title_x=0.5)
 
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return graphJSON
+        graphs.append(graphJSON)
+
+    return graphs
 
 
 
@@ -314,28 +310,36 @@ def home():
         html_df = pd.DataFrame(values).T
         html_df.columns = input_df.columns
 
-
         df_html = html_df.to_html(classes="table table-dark")
         pred = f"The predicted house price with above specifications cost approximately ${np.round(pipeline1.predict(input_df))[0]}"
 
-        return render_template("index.html", graphJSON=geomap1(), pie=pie(), p2_bar=p2_bar(), p3_bar=p3_bar() , p4_graph = p4_ratings(),p5_graph = p5_corr(),p5_graph2 = p5_corr2(), p6_graph = p6_scatter(),values = pred , df_html = df_html)
+        return render_template("index.html", graphJSON=geomap1(),
+                               pie=pie(),
+                               p2_bar=p2_bar(),
+                               p3_bar=p3_bar() ,
+                               p4_graph1 = p4_ratings()[0],
+                               p4_graph2=p4_ratings()[1],
+                               p4_graph3=p4_ratings()[2],
+                               p4_graph4=p4_ratings()[3],
+                               p4_graph5=p4_ratings()[4],
+                               p5_graph = p5_corr(),
+                               p5_graph2 = p5_corr2(),
+                               p6_graph = p6_scatter(),
+                               values = pred ,
+                               df_html = df_html)
 
-    return render_template("index.html" , graphJSON=geomap1() , pie = pie() , p2_bar = p2_bar() , p3_bar = p3_bar() ,  p4_graph = p4_ratings(),p5_graph = p5_corr(),p5_graph2 = p5_corr2(),p6_graph = p6_scatter())
-
-
-@app.route("/portfolio" , methods = ["GET","POST"])
-def p4_graph():
-    if request.method == "POST":
-        values = [i for i in request.form.values()]
-        if values[1] == "True":
-            values[1] = True
-        else:
-            values[1] = False
-
-        return render_template("index.html", graphJSON=geomap1(), pie=pie(), p2_bar=p2_bar(), p3_bar=p3_bar() , p4_graph = p4_ratings(arg = values[0],agg=values[1]),p5_graph = p5_corr(),p5_graph2 = p5_corr2(),p6_graph = p6_scatter())
-
-    return render_template("index.html" , graphJSON=geomap1() , pie = pie() , p2_bar = p2_bar() , p3_bar = p3_bar() ,  p4_graph = p4_ratings(),p5_graph = p5_corr(),p5_graph2 = p5_corr2(),p6_graph = p6_scatter())
-
+    return render_template("index.html" , graphJSON=geomap1() ,
+                           pie = pie() ,
+                           p2_bar = p2_bar() ,
+                           p3_bar = p3_bar() ,
+                           p4_graph1=p4_ratings()[0],
+                           p4_graph2=p4_ratings()[1],
+                           p4_graph3=p4_ratings()[2],
+                           p4_graph4=p4_ratings()[3],
+                           p4_graph5=p4_ratings()[4],
+                           p5_graph = p5_corr(),
+                           p5_graph2 = p5_corr2(),
+                           p6_graph = p6_scatter())
 
 # @app.route("/predict" , methods = ["GET","POST"])
 # def predict():
