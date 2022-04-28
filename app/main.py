@@ -9,8 +9,19 @@ from plotly.subplots import make_subplots
 import plotly.graph_objs as go
 import pickle
 from sklearn.model_selection import train_test_split
+from utils import get_base_url
 
-app = Flask(__name__)
+# setup the webserver
+# port may need to be changed if there are multiple flask servers running on same server
+# port = 12345
+port = 12346
+base_url = get_base_url(port)
+
+# if the base url is not empty, then the server is running in development, and we need to specify the static folder so that the static files are served
+if base_url == '/':
+    app = Flask(__name__)
+else:
+    app = Flask(__name__, static_url_path=base_url+'static')
 
 # Function to get the data
 def data():
@@ -293,7 +304,7 @@ def p6_scatter():
 
 #===============================================================================================================================================================
 
-@app.route("/" , methods = ["GET","POST"])
+@app.route(f"{base_url}" , methods = ["GET","POST"])
 def home():
     if request.method == "POST":
         pipeline1 = pickle.load(open('housemodel.pkl', 'rb'))
@@ -360,7 +371,8 @@ def home():
 #     return render_template("index.html" , graphJSON=geomap1() , pie = pie() , p2_bar = p2_bar() , p3_bar = p3_bar() )
 
 
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    # IMPORTANT: change url to the site where you are editing this file.
+    website_url = 'cocalc4.ai-camp.dev/'
+    print(f'Try to open\n\n    https://{website_url}' + base_url + '\n\n')
+    app.run(host = '0.0.0.0', port=port, debug=True)
