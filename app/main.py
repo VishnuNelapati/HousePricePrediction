@@ -317,6 +317,8 @@ def home():
                 input.append(i)
 
         input_df = format(input)
+        
+        input_df.fillna(20,inplace=True)
 
         html_df = pd.DataFrame(values).T
         html_df.columns = input_df.columns
